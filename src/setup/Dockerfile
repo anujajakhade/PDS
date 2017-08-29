@@ -2,7 +2,7 @@
 #
 # This Dockerfile builds a basic installation of PDS version 1.4.
 #
-#
+#  
 # To build this image, from the directory containing this Dockerfile
 # (assuming that the file is named Dockerfile):
 # docker build -t <image_name> .
@@ -43,44 +43,44 @@ RUN apt-get update && apt-get install -y \
     Flask \
     launchpadlib \
     simplejson \
-    logging
-
+    logging 
+	
 
 #Set Environmental Variables
-RUN echo $PATH
-ENV PATH=/usr/local/bin:$PATH
-RUN sh -c "echo 'export PATH=/usr/local/bin:$PATH' > /etc/profile.d/alternate_install_path.sh"
+RUN echo $PATH 
+ENV PATH=/usr/local/bin:$PATH 
+RUN sh -c "echo 'export PATH=/usr/local/bin:$PATH' > /etc/profile.d/alternate_install_path.sh" 
 
-# Clone PDS from git
+# Clone httpd from git
 
 RUN  cd /opt/ \
-&& git clone https://github.com/linux-on-ibm-z/PDS.git \
+&& git clone https://github.com/ntamhank-ibm/PDS.git \
 && cd PDS \
 && git checkout v1.4 \
 
-
+ 
 # Set Environmental Variables
-&&  sh -c "echo 'export PYTHONPATH=/opt/PDS/src/classes:/opt/PDS/src/config:$PYTHONPATH' > /etc/profile.d/pds.sh" \
-
+&& sudo sh -c "echo 'export PYTHONPATH=/opt/PDS/src/classes:/opt/PDS/src/config:$PYTHONPATH' > /etc/profile.d/pds.sh" \
+ 
 # Copy the apache configuration file from /opt/PDS/src/config/pds.conf into respective apache configuration folder as below
-&&  cp -f /opt/PDS/src/config/pds.conf /etc/apache2/sites-enabled/pds.conf \
-&&  mv /etc/apache2/sites-enabled/000-default.conf /etc/apache2/sites-enabled/z-000-default.conf \
-
+&& sudo cp -f /opt/PDS/src/config/pds.conf /etc/apache2/sites-enabled/pds.conf \
+&& sudo mv /etc/apache2/sites-enabled/000-default.conf /etc/apache2/sites-enabled/z-000-default.conf \
+ 
 #Create new user and group for apache
-&& useradd apache \
-
+&& sudo useradd apache \
+#&& sudo groupadd apache \
 
 #Set appropriate folder and file permission on /opt/PDS/ folder for apache
-&& chown -R apache:apache /opt/PDS/ \
+&& sudo chown -R apache:apache /opt/PDS/ \
 
 # Clean up cache , source data and un-used packages
-
+ 
 && apt-get remove -y \
     gcc \
     git \
     libssl-dev  \
-    libffi-dev \
-    cron \
+    libffi-dev \ 
+    cron \  
  && apt-get autoremove -y \
  && apt autoremove -y \
  && apt-get clean && rm -rf /var/lib/apt/lists/* $SOURCE_DIR
