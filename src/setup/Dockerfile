@@ -54,7 +54,7 @@ RUN sh -c "echo 'export PATH=/usr/local/bin:$PATH' > /etc/profile.d/alternate_in
 # Clone httpd from git
 
 RUN  cd /opt/ \
-&& git clone https://github.com/ntamhank-ibm/PDS.git \
+&& git clone https://github.com/linux-on-ibm-z/PDS.git \
 && cd PDS \
 && git checkout v1.4 \
 
